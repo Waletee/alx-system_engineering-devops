@@ -2,4 +2,5 @@
 
 Host *
       PasswordAuthentication no
-      IdentifyFile ~/.ssh/school
+      IdentityFile ~/.ssh/school
+      PubKeyAuthentication yes
