@@ -2,7 +2,7 @@
 # installs nginx and configure it to listen on port 80
 # print "Hello World"
 
-apt-get -y update
+apt-get update
 apt-get -y install nginx
 ufw allow 'Nginx HTTP'
 echo 'Hello World!' > /var/www/html/index.html
