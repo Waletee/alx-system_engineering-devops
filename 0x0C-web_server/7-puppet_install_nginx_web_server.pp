@@ -1,22 +1,25 @@
-# Install and configure nginx
-package { 'jfryman-nginx':
-  ensure => installed,
+# Script to install nginx using puppet
+
+package {'nginx':
+  ensure => 'present',
 }
 
-include nginx
+exec {'install':
+  command  => 'sudo apt-get update ; sudo apt-get -y install nginx',
+  provider => shell,
 
-class { 'nginx':
-  manage_repo    => true,
-  package_source => 'nginx-stable',
 }
 
-nginx::resource::server { '34.73.76.135':
-  listen_port      => 80,
-  www_root         => '/var/www/html/',
-  vhost_cfg_append => { 'rewrite' => '^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent' },
+exec {'Hello':
+  command  => 'echo "Hello World!" | sudo tee /var/www/html/index.html',
+  provider => shell,
 }
 
-file { 'index':
-  path    => '/var/www/html/index.nginx-debian.html',
-  content => 'Holberton School for the win!',
+exec {'sudo sed -i "s/listen 80 default_server;/listen 80 default_server;\\n\\tlocation \/redirect_me {\\n\\t\\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4\/;\\n\\t}/" /etc/nginx/sites-available/default':
+  provider => shell,
+}
+
+exec {'run':
+  command  => 'sudo service nginx restart',
+  provider => shell,
 }
